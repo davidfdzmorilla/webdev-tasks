@@ -4,10 +4,10 @@ export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
-  emailVerified: timestamp('email_verified'),
+  emailVerified: timestamp('email_verified', { mode: 'date' }),
   image: text('image'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
 export const sessions = pgTable('sessions', {
@@ -15,7 +15,7 @@ export const sessions = pgTable('sessions', {
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expiresAt: timestamp('expires_at').notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
 });
 
 export const accounts = pgTable('accounts', {
@@ -27,16 +27,16 @@ export const accounts = pgTable('accounts', {
   providerId: text('provider_id').notNull(),
   accessToken: text('access_token'),
   refreshToken: text('refresh_token'),
-  expiresAt: timestamp('expires_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'date' }),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
 export const verifications = pgTable('verifications', {
   id: uuid('id').primaryKey().defaultRandom(),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
-  expiresAt: timestamp('expires_at').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
 export const tasks = pgTable('tasks', {
@@ -48,9 +48,9 @@ export const tasks = pgTable('tasks', {
   description: text('description'),
   status: varchar('status', { length: 50 }).notNull().default('todo'), // todo, in_progress, done
   priority: varchar('priority', { length: 50 }).notNull().default('medium'), // low, medium, high
-  dueDate: timestamp('due_date'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  dueDate: timestamp('due_date', { mode: 'date' }),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
 export const categories = pgTable('categories', {
@@ -60,7 +60,7 @@ export const categories = pgTable('categories', {
     .references(() => users.id, { onDelete: 'cascade' }),
   name: varchar('name', { length: 100 }).notNull(),
   color: varchar('color', { length: 7 }).notNull().default('#3b82f6'), // hex color
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
 export const taskCategories = pgTable('task_categories', {
