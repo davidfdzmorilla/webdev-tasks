@@ -26,10 +26,8 @@ services:
     container_name: webdev-tasks
     ports:
       - "3004:3000"
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://webdev_user:webdev_pass@postgres:5432/webdev_tasks
-      - BETTER_AUTH_URL=https://tasks.davidfdzmorilla.dev
+    env_file:
+      - .env.production
     depends_on:
       postgres:
         condition: service_healthy
