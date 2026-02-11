@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: webdev-tasks-db
+    environment:
+      POSTGRES_USER: webdev_user
+      POSTGRES_PASSWORD: webdev_pass
+      POSTGRES_DB: webdev_tasks
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webdev_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webdev-tasks
+    ports:
+      - "3004:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://webdev_user:webdev_pass@postgres:5432/webdev_tasks
+      - BETTER_AUTH_URL=https://tasks.davidfdzmorilla.dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
