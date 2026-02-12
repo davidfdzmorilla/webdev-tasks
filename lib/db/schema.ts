@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, uuid, varchar, integer, boolean } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -6,8 +7,8 @@ export const users = pgTable('users', {
   name: varchar('name', { length: 255 }).notNull(),
   emailVerified: boolean('email_verified').default(false),
   image: text('image'),
-  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', { mode: 'string' }).defaultNow().notNull(),
+  createdAt: timestamp('created_at').notNull().default(sql`now()`),
+  updatedAt: timestamp('updated_at').notNull().default(sql`now()`),
 });
 
 export const sessions = pgTable('sessions', {
@@ -15,7 +16,7 @@ export const sessions = pgTable('sessions', {
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
 });
 
 export const accounts = pgTable('accounts', {
@@ -27,16 +28,16 @@ export const accounts = pgTable('accounts', {
   providerId: text('provider_id').notNull(),
   accessToken: text('access_token'),
   refreshToken: text('refresh_token'),
-  expiresAt: timestamp('expires_at', { mode: 'string' }),
-  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
+  expiresAt: timestamp('expires_at'),
+  createdAt: timestamp('created_at').notNull().default(sql`now()`),
 });
 
 export const verifications = pgTable('verifications', {
   id: uuid('id').primaryKey().defaultRandom(),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
-  expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
-  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').notNull().default(sql`now()`),
 });
 
 export const tasks = pgTable('tasks', {
