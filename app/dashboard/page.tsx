@@ -6,6 +6,7 @@ import { tasks } from '@/lib/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import TaskList from '@/components/TaskList';
 import CreateTaskForm from '@/components/CreateTaskForm';
+import SignOutButton from '@/components/SignOutButton';
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -38,14 +39,7 @@ export default async function DashboardPage() {
               <span className="text-sm text-gray-700 dark:text-gray-300">
                 {session.user.name}
               </span>
-              <form action="/api/auth/sign-out" method="POST">
-                <button
-                  type="submit"
-                  className="rounded-md bg-gray-200 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                >
-                  Sign out
-                </button>
-              </form>
+              <SignOutButton />
             </div>
           </div>
         </div>
