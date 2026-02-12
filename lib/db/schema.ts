@@ -4,10 +4,10 @@ export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   name: varchar('name', { length: 255 }).notNull(),
-  emailVerified: timestamp('email_verified'),
+  emailVerified: timestamp('email_verified', { mode: 'string' }),
   image: text('image'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'string' }).defaultNow().notNull(),
 });
 
 export const sessions = pgTable('sessions', {
@@ -15,7 +15,7 @@ export const sessions = pgTable('sessions', {
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expiresAt: timestamp('expires_at').notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
 });
 
 export const accounts = pgTable('accounts', {
@@ -27,16 +27,16 @@ export const accounts = pgTable('accounts', {
   providerId: text('provider_id').notNull(),
   accessToken: text('access_token'),
   refreshToken: text('refresh_token'),
-  expiresAt: timestamp('expires_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'string' }),
+  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
 });
 
 export const verifications = pgTable('verifications', {
   id: uuid('id').primaryKey().defaultRandom(),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
-  expiresAt: timestamp('expires_at').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { mode: 'string' }).notNull(),
+  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow().notNull(),
 });
 
 export const tasks = pgTable('tasks', {
