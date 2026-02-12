@@ -16,7 +16,10 @@ export const sessions = pgTable('sessions', {
   userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
+  token: text('token').notNull().unique(),
   expiresAt: timestamp('expires_at').notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
 });
 
 export const accounts = pgTable('accounts', {
